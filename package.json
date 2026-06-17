@@ -10,5 +10,14 @@
   "author": "Sofia Lara Goszko - C26134",
   "license": "Mit",
   "type": "module",
-  "description": ""
+  "description": "",
+  "dependencies": {
+    "body-parser": "^2.3.0",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "express-validator": "^7.3.2",
+    "firebase": "^12.15.0",
+    "jsonwebtoken": "^9.0.3"
+  }
 }
