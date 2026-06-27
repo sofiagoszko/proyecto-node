@@ -2,7 +2,8 @@
 import { 
   getProductsModel, 
   getProductByIdModel,
-  createProductModel
+  createProductModel,
+  deleteProductModel
 } from '../models/Product.js'
 
 export const getProducts = async (req, res) => {
@@ -21,7 +22,7 @@ export const getProductById = async (req, res) => {
 
   if(!product){
     return res.status(404).json({
-      message: 'Prodcuto no encontrado',
+      message: 'Producto no encontrado',
     });
   }
 
@@ -40,4 +41,21 @@ export const createProduct = async (req, res) => {
     message: 'Producto creado con éxito',
     product: newProduct
   });
+}
+
+export const deleteProduct = async (req, res) => {
+  const { id } = req.params;
+  const product = await deleteProductModel(id);
+
+  if(!product){
+    return res.status(404).json({
+      message: 'Producto no encontrado',
+    });
+  }
+
+  res.status(200).json({
+    message: 'Producto eliminado con éxito',
+    product: product
+  });
+
 }

@@ -1,5 +1,5 @@
 import db from '../config/firebase.js';
-import { collection, getDocs, getDoc, doc, addDoc } from 'firebase/firestore';
+import { collection, getDocs, getDoc, doc, addDoc, deleteDoc } from 'firebase/firestore';
 
 const productsCollection = collection(db, 'products');
 
@@ -47,3 +47,25 @@ export const createProductModel = async (newProduct) => {
         console.error('Error al crear producto: ', e);
     }
 }
+
+export const deleteProductModel = async (id) => {
+    try {
+        const productRef = doc(productsCollection, id);
+        const snapshot = await getDoc(productRef);
+
+        if(!snapshot.exists()){
+            return null;
+        }
+
+        const product =  {
+            id: snapshot.id,
+            ...snapshot.data(),
+        }
+
+        await deleteDoc(productRef);
+
+        return product;
+    } catch (e) {
+        console.error('Error al obtener el producto: ', e);
+    }
+};
