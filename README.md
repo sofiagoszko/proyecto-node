@@ -1,62 +1,110 @@
-# Pre-Entrega de Proyecto
+# API REST de Productos
 
-- Alumna: Sofia Lara Goszko
-- Comisión: 26134 
+API REST con Express y Firebase Firestore para gestión de productos
 
-## Requerimiento #1: Configuración Inicial
+- **Alumna:** Sofia Lara Goszko
+- **Comisión:** 26134
 
-1. Crea un directorio donde alojarás tu proyecto e incluye un archivo `index.js` como punto de entrada.
-2. Inicia Node.js y configura npm usando el comando 
-```
-npm init -y
+---
 
-```
-3. Agrega la siguiente propiedad en el archivo `package.json` para habilitar ESModules.
-```
-"type": "module" 
-```
-4. Configura un script llamado `start` para ejecutar el programa con el comando npm run start.
-
-## Requerimiento #2: Lógica de Gestión de Productos
-
-Con la base del proyecto lista, implementar las funcionalidades principales usando la API FakeStore. 
-
-El sistema debe ser capaz de interpretar los comandos ingresados en la terminal y ejecutar las siguientes acciones:
-
-### Consultar Todos los Productos
-
-``` 
- npm run start GET products
-```  
-
-El programa debe realizar una petición asíncrona a la API y devolver la lista completa de productos en la consola.
-
-### Consultar un Producto Específico
+## Estructura del proyecto
 
 ```
-npm run start GET products/<productId>
+proyecto-node/
+├── index.js                        
+├── .env.example                    
+├── package.json
+└── src/
+    ├── config/
+    │   └── firebase.js             
+    ├── controllers/
+    │   └── products.controller.js  
+    ├── middlewares/
+    │   ├── validateProduct.js      
+    │   ├── validateId.js           
+    │   ├── error.js                
+    │   └── error404.js             
+    ├── models/
+    │   └── Product.js              
+    └── routes/
+        └── products.routes.js      
 ```
 
-El programa debe obtener y mostrar el producto correspondiente al productId indicado.
+---
 
-Ejemplo: `npm run start GET products/15`
+## Librerías utilizadas
 
-### Crear un Producto Nuevo
+| Librería | Versión 
+|---|---
+| express | ^5.2.1 
+| firebase | ^12.15.0 
+| express-validator | ^7.3.2 
+| dotenv | ^17.4.2 
+| cors | ^2.8.6 
+
+---
+
+## Requisitos previos
+
+- Node.js v18 o superior
+- Una cuenta en Firebase con un proyecto creado y Firestore habilitado
+
+---
+
+## Instalación y configuración
+
+**1. Clonar el repositorio e instalar dependencias**
+
+```bash
+npm install
+```
+
+**2. Crear el archivo `.env` en la raíz del proyecto**
 
 ```
-npm run start POST products <title> <price> <category>
+API_KEY=
+AUTH_DOMAIN=
+PROJECT_ID=
+STORAGE_BUCKET=
+MESSAGING_SENDER_ID=
+APP_ID=
+PORT=
 ```
 
-El programa debe enviar una petición POST a la API para agregar un nuevo producto con los datos proporcionados (title, price, category) y devolver el resultado en la consola.
+---
 
-Ejemplo: `npm run start POST products T-Shirt-Rex 300 remeras`
+## Cómo correrlo
 
-### Eliminar un Producto
 
+```bash
+npm run start
 ```
-npm run start DELETE products/<productId>
+
+
+La API queda disponible en `http://localhost:3000`.
+
+---
+
+## Endpoints
+
+Base URL: `/api/products`
+
+| Método | Ruta | Descripción |
+|---|---|---|
+| GET | `/api/products` | Obtiene todos los productos |
+| GET | `/api/products/:id` | Obtiene un producto por ID |
+| POST | `/api/products` | Crea un nuevo producto |
+| PUT | `/api/products/:id` | Modifica un producto existente |
+| DELETE | `/api/products/:id` | Elimina un producto |
+
+### Body requerido para POST y PUT
+
+```json
+{
+  "title": "Nombre del producto",
+  "description": "Descripción del producto",
+  "price": 99.99,
+  "stock": 10
+}
 ```
 
-El programa debe enviar una petición DELETE para eliminar el producto correspondiente al productId y devolver la respuesta en la consola.
-
-Ejemplo: `npm run start DELETE products/7`
