@@ -6,13 +6,13 @@ import { error403 } from './src/middlewares/error403.js';
 import { error401 } from './src/middlewares/error401.js';
 import { error400 } from './src/middlewares/error400.js';
 import { error500 } from './src/middlewares/error500.js';
-import productsRouter from './src/routes/products.routes.js'
+import productsRouter from './src/routes/products.routes.js';
 
+dotenv.config();
 const app = express();
 app.use(express.json());
 app.use(cors());
 
-dotenv.config();
 const PORT = process.env.PORT || 3000;
 
 app.get("/", (req, res) => {

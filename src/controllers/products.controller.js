@@ -72,7 +72,7 @@ export const updateProduct = async (req, res) => {
     });
   }
 
-  res.status(201).json({
+  res.status(200).json({
     message: 'Producto modificado con éxito',
     product: product
   });

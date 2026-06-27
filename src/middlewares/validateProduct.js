@@ -5,13 +5,21 @@ export const validateProduct = [
         .isString()
         .withMessage('El nombre del producto debe ser un string')
         .notEmpty()
-        .withMessage('El nombre del producto no puede estar vacío'),
+        .withMessage('El nombre del producto no puede estar vacío')
+        .isLength({ max: 50 })
+        .withMessage('El nombre no puede superar los 50 caracteres')
+        .trim()
+        .escape(),
 
     body('description')
         .isString()
         .withMessage('La descripción del producto debe ser un string')
         .notEmpty()
-        .withMessage('La descripción del producto no puede estar vacío'),
+        .withMessage('La descripción del producto no puede estar vacío')
+        .isLength({ max: 100 })
+        .withMessage('La descripción no puede superar los 100 caracteres')
+        .trim()
+        .escape(),
 
     body('price')
         .isFloat({ gt: 0 })
