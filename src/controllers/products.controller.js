@@ -1,7 +1,8 @@
 //Controller de productos
 import { 
   getProductsModel, 
-  getProductByIdModel
+  getProductByIdModel,
+  createProductModel
 } from '../models/Product.js'
 
 export const getProducts = async (req, res) => {
@@ -29,4 +30,14 @@ export const getProductById = async (req, res) => {
     product: product
   });
 
+}
+
+export const createProduct = async (req, res) => {
+  const productData = req.body;
+  const newProduct = await createProductModel(productData);
+
+  res.status(201).json({
+    message: 'Producto creado con éxito',
+    product: newProduct
+  });
 }

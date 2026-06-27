@@ -1,5 +1,5 @@
 import db from '../config/firebase.js';
-import { collection, getDocs, getDoc, doc } from 'firebase/firestore';
+import { collection, getDocs, getDoc, doc, addDoc } from 'firebase/firestore';
 
 const productsCollection = collection(db, 'products');
 
@@ -32,6 +32,18 @@ export const getProductByIdModel = async (id) => {
         }
     } catch (e) {
         console.error('Error al obtener el producto: ', e);
-        return [];
     }
 };
+
+export const createProductModel = async (newProduct) => {
+    try {
+        const productRef = await addDoc(productsCollection, newProduct);
+
+        return {
+            id: productRef.id,
+            ...newProduct,
+        }
+    } catch (e) {
+        console.error('Error al crear producto: ', e);
+    }
+}
