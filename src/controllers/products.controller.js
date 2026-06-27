@@ -3,7 +3,8 @@ import {
   getProductsModel, 
   getProductByIdModel,
   createProductModel,
-  deleteProductModel
+  deleteProductModel,
+  updateProductModel
 } from '../models/Product.js'
 
 export const getProducts = async (req, res) => {
@@ -58,4 +59,21 @@ export const deleteProduct = async (req, res) => {
     product: product
   });
 
+}
+
+export const updateProduct = async (req, res) => {
+  const { id } = req.params;
+  const productData = req.body;
+  const product = await updateProductModel(id, productData);
+
+  if(!product){
+    return res.status(404).json({
+      message: 'Producto no encontrado',
+    });
+  }
+
+  res.status(201).json({
+    message: 'Producto modificado con éxito',
+    product: product
+  });
 }
