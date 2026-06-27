@@ -8,72 +8,90 @@ import {
 } from '../models/Product.js'
 
 export const getProducts = async (req, res) => {
-  const products = await getProductsModel();
-  const msg = products.length === 0 ? 'No hay productos cargados aun' : 'Aqui está la lista de productos disponibles';
+  try {
+    const products = await getProductsModel();
+    const msg = products.length === 0 ? 'No hay productos cargados aun' : 'Aqui está la lista de productos disponibles';
 
-  res.status(200).json({
-    message: msg,
-    products: products
-  });
+    res.status(200).json({
+      message: msg,
+      products: products
+    });
+  } catch (e) {
+    res.status(500).json({ message: 'Error al obtener los productos' });
+  }
 }
 
 export const getProductById = async (req, res) => {
-  const { id } = req.params;
-  const product = await getProductByIdModel(id);
+  try {
+    const { id } = req.params;
+    const product = await getProductByIdModel(id);
 
-  if(!product){
-    return res.status(404).json({
-      message: 'Producto no encontrado',
+    if(!product){
+      return res.status(404).json({
+        message: 'Producto no encontrado',
+      });
+    }
+
+    res.status(200).json({
+      message: 'Información del producto solicitado',
+      product: product
     });
+  } catch (e) {
+    res.status(500).json({ message: 'Error al obtener el producto' });
   }
-
-  res.status(200).json({
-    message: 'Información del producto solicitado',
-    product: product
-  });
-
 }
 
 export const createProduct = async (req, res) => {
-  const productData = req.body;
-  const newProduct = await createProductModel(productData);
+  try {
+    const productData = req.body;
+    const newProduct = await createProductModel(productData);
 
-  res.status(201).json({
-    message: 'Producto creado con éxito',
-    product: newProduct
-  });
+    res.status(201).json({
+      message: 'Producto creado con éxito',
+      product: newProduct
+    });
+  } catch (e) {
+    res.status(500).json({ message: 'Error al crear el producto' });
+  }
 }
 
 export const deleteProduct = async (req, res) => {
-  const { id } = req.params;
-  const product = await deleteProductModel(id);
+  try {
+    const { id } = req.params;
+    const product = await deleteProductModel(id);
 
-  if(!product){
-    return res.status(404).json({
-      message: 'Producto no encontrado',
+    if(!product){
+      return res.status(404).json({
+        message: 'Producto no encontrado',
+      });
+    }
+
+    res.status(200).json({
+      message: 'Producto eliminado con éxito',
+      product: product
     });
+  } catch (e) {
+    res.status(500).json({ message: 'Error al eliminar el producto' });
   }
-
-  res.status(200).json({
-    message: 'Producto eliminado con éxito',
-    product: product
-  });
-
 }
 
 export const updateProduct = async (req, res) => {
-  const { id } = req.params;
-  const productData = req.body;
-  const product = await updateProductModel(id, productData);
+  try {
+    const { id } = req.params;
+    const productData = req.body;
+    const product = await updateProductModel(id, productData);
 
-  if(!product){
-    return res.status(404).json({
-      message: 'Producto no encontrado',
+    if(!product){
+      return res.status(404).json({
+        message: 'Producto no encontrado',
+      });
+    }
+
+    res.status(200).json({
+      message: 'Producto modificado con éxito',
+      product: product
     });
+  } catch (e) {
+    res.status(500).json({ message: 'Error al modificar el producto' });
   }
-
-  res.status(200).json({
-    message: 'Producto modificado con éxito',
-    product: product
-  });
 }

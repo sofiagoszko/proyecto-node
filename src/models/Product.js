@@ -13,7 +13,7 @@ export const getProductsModel = async () => {
         return products;
     } catch (e) {
         console.error('Error al obtener los productos: ', e);
-        return [];
+        throw e;
     }
 };
 
@@ -32,6 +32,7 @@ export const getProductByIdModel = async (id) => {
         }
     } catch (e) {
         console.error('Error al obtener el producto: ', e);
+        throw e;
     }
 };
 
@@ -45,6 +46,7 @@ export const createProductModel = async (newProduct) => {
         }
     } catch (e) {
         console.error('Error al crear producto: ', e);
+        throw e;
     }
 }
 
@@ -57,7 +59,7 @@ export const deleteProductModel = async (id) => {
             return null;
         }
 
-        const product =  {
+        const product = {
             id: snapshot.id,
             ...snapshot.data(),
         }
@@ -66,7 +68,8 @@ export const deleteProductModel = async (id) => {
 
         return product;
     } catch (e) {
-        console.error('Error al obtener el producto: ', e);
+        console.error('Error al eliminar el producto: ', e);
+        throw e;
     }
 };
 
@@ -86,6 +89,7 @@ export const updateProductModel = async (id, updateProduct) => {
             ...updateProduct,
         }
     } catch (e) {
-        console.error('Error al crear producto: ', e);
+        console.error('Error al modificar el producto: ', e);
+        throw e;
     }
 }
