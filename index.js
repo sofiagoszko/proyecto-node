@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import { error404 } from './src/middlewares/error404.js';
 import { error } from './src/middlewares/error.js';
 import productsRouter from './src/routes/products.routes.js';
+import authRouter from './src/routes/auth.routes.js';
 
 dotenv.config();
 const app = express();
@@ -17,6 +18,7 @@ app.get("/", (req, res) => {
 });
 
 app.use('/api/products', productsRouter);
+app.use('/api/auth', authRouter);
 
 
 app.use(error404);
