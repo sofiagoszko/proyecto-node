@@ -1,8 +1,8 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import { error404 } from './src/middlewares/error404.js';
-import { error } from './src/middlewares/error.js';
+import { error404 } from './src/middlewares/error404.middleware.js';
+import { error } from './src/middlewares/error.middleware.js';
 import productsRouter from './src/routes/products.routes.js';
 import authRouter from './src/routes/auth.routes.js';
 
