@@ -26,9 +26,9 @@ export const getProductById = async (req, res, next) => {
     const product = await getProductByIdModel(id);
 
     if(!product){
-      return res.status(404).json({
-        message: 'Producto no encontrado',
-      });
+      const err = new Error();
+      err.status = 404;
+      return next(err);
     }
 
     res.status(200).json({
@@ -59,9 +59,9 @@ export const deleteProduct = async (req, res, next) => {
     const product = await deleteProductModel(id);
 
     if(!product){
-      return res.status(404).json({
-        message: 'Producto no encontrado',
-      });
+      const err = new Error();
+      err.status = 404;
+      return next(err);
     }
 
     res.status(200).json({
@@ -79,9 +79,9 @@ export const updateProduct = async (req, res, next) => {
     const product = await updateProductModel(id, req.body);
 
     if(!product){
-      return res.status(404).json({
-        message: 'Producto no encontrado',
-      });
+      const err = new Error();
+      err.status = 404;
+      return next(err);
     }
 
     res.status(200).json({
