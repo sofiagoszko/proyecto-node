@@ -84,9 +84,10 @@ export const updateProductModel = async (id, updateProduct) => {
 
         await updateDoc(productRef, updateProduct)
 
+        const updated = await getDoc(productRef);
         return {
-            id: productRef.id,
-            ...updateProduct,
+            id: updated.id,
+            ...updated.data(),
         }
     } catch (e) {
         console.error('Error al modificar el producto: ', e);
