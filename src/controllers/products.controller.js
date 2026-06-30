@@ -1,13 +1,12 @@
-//Controller de productos
-import { 
-  getProductsModel, 
+import {
+  getProductsModel,
   getProductByIdModel,
   createProductModel,
   deleteProductModel,
   updateProductModel
 } from '../models/Product.js'
 
-export const getProducts = async (req, res) => {
+export const getProducts = async (req, res, next) => {
   try {
     const products = await getProductsModel();
     const msg = products.length === 0 ? 'No hay productos cargados aun' : 'Aqui está la lista de productos disponibles';
@@ -17,11 +16,11 @@ export const getProducts = async (req, res) => {
       products: products
     });
   } catch (e) {
-    res.status(500).json({ message: 'Error al obtener los productos' });
+    next(e);
   }
 }
 
-export const getProductById = async (req, res) => {
+export const getProductById = async (req, res, next) => {
   try {
     const { id } = req.params;
     const product = await getProductByIdModel(id);
@@ -37,25 +36,24 @@ export const getProductById = async (req, res) => {
       product: product
     });
   } catch (e) {
-    res.status(500).json({ message: 'Error al obtener el producto' });
+    next(e);
   }
 }
 
-export const createProduct = async (req, res) => {
+export const createProduct = async (req, res, next) => {
   try {
-    const productData = req.body;
-    const newProduct = await createProductModel(productData);
+    const newProduct = await createProductModel(req.body);
 
     res.status(201).json({
       message: 'Producto creado con éxito',
       product: newProduct
     });
   } catch (e) {
-    res.status(500).json({ message: 'Error al crear el producto' });
+    next(e);
   }
 }
 
-export const deleteProduct = async (req, res) => {
+export const deleteProduct = async (req, res, next) => {
   try {
     const { id } = req.params;
     const product = await deleteProductModel(id);
@@ -71,15 +69,14 @@ export const deleteProduct = async (req, res) => {
       product: product
     });
   } catch (e) {
-    res.status(500).json({ message: 'Error al eliminar el producto' });
+    next(e);
   }
 }
 
-export const updateProduct = async (req, res) => {
+export const updateProduct = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const productData = req.body;
-    const product = await updateProductModel(id, productData);
+    const product = await updateProductModel(id, req.body);
 
     if(!product){
       return res.status(404).json({
@@ -92,6 +89,6 @@ export const updateProduct = async (req, res) => {
       product: product
     });
   } catch (e) {
-    res.status(500).json({ message: 'Error al modificar el producto' });
+    next(e);
   }
 }
