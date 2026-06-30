@@ -11,7 +11,7 @@ export const validateLogin = [
     body('password')
         .trim()
         .notEmpty()
-        .withMessage('La constraseña no puede estar vacío'),    
+        .withMessage('La contraseña no puede estar vacía'),
 
     (req, res, next) => {
         const errors = validationResult(req);
