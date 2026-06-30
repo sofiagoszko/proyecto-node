@@ -1,6 +1,6 @@
 # API REST de Productos
 
-API REST con Express y Firebase Firestore para gestión de productos
+API REST con Express y Firebase Firestore para gestión de productos con autenticación JWT.
 
 - **Alumna:** Sofia Lara Goszko
 - **Comisión:** 26134
@@ -10,37 +10,45 @@ API REST con Express y Firebase Firestore para gestión de productos
 ## Estructura del proyecto
 
 ```
-proyecto-node/
-├── index.js                        
-├── .env.example                    
+NODE_ENTREGA/
+├── index.js
+├── .env.example
 ├── package.json
 └── src/
     ├── config/
-    │   └── firebase.js             
+    │   └── firebase.js
     ├── controllers/
-    │   └── products.controller.js  
+    │   ├── auth.controller.js
+    │   └── products.controller.js
     ├── middlewares/
-    │   ├── validateProduct.js      
-    │   ├── validateId.js           
-    │   ├── error.js                
-    │   └── error404.js             
+    │   ├── auth.middleware.js
+    │   ├── error.middleware.js
+    │   ├── error404.middleware.js
+    │   ├── validateId.js
+    │   ├── validateLogin.js
+    │   └── validateProduct.js
     ├── models/
-    │   └── Product.js              
-    └── routes/
-        └── products.routes.js      
+    │   ├── Product.js
+    │   └── Users.js
+    ├── routes/
+    │   ├── auth.routes.js
+    │   └── products.routes.js
+    └── utils/
+        └── token.generator.js
 ```
 
 ---
 
 ## Librerías utilizadas
 
-| Librería | Versión 
-|---|---
-| express | ^5.2.1 
-| firebase | ^12.15.0 
-| express-validator | ^7.3.2 
-| dotenv | ^17.4.2 
-| cors | ^2.8.6 
+| Librería | Versión |
+|---|---|
+| express | ^5.2.1 |
+| firebase | ^12.15.0 |
+| jsonwebtoken | ^9.0.3 |
+| express-validator | ^7.3.2 |
+| dotenv | ^17.4.2 |
+| cors | ^2.8.6 |
 
 ---
 
@@ -68,43 +76,77 @@ PROJECT_ID=
 STORAGE_BUCKET=
 MESSAGING_SENDER_ID=
 APP_ID=
-PORT=
+JWT_SECRET=
+PORT=3000
 ```
 
 ---
 
 ## Cómo correrlo
 
-
 ```bash
-npm run start
-```
+# Producción
+npm start
 
+# Desarrollo (con hot reload)
+npm run dev
+```
 
 La API queda disponible en `http://localhost:3000`.
 
 ---
 
+## Autenticación
+
+Los endpoints de escritura (POST, PUT, DELETE) requieren un token JWT en el header:
+
+```
+Authorization: Bearer <token>
+```
+
+El token se obtiene haciendo login con las credenciales del usuario de demostración.
+
+### Credenciales por defecto
+
+```
+Email:    user@email.com
+Password: strongPass123.
+```
+
+---
+
 ## Endpoints
 
-Base URL: `/api/products`
+### Autenticación
 
-| Método | Ruta | Descripción |
-|---|---|---|
-| GET | `/api/products` | Obtiene todos los productos |
-| GET | `/api/products/:id` | Obtiene un producto por ID |
-| POST | `/api/products` | Crea un nuevo producto |
-| PUT | `/api/products/:id` | Modifica un producto existente |
-| DELETE | `/api/products/:id` | Elimina un producto |
+| Método | Ruta | Descripción | Auth |
+|---|---|---|---|
+| POST | `/api/auth/login` | Inicia sesión y devuelve un token JWT | No |
 
-### Body requerido para POST y PUT
-
+**Body:**
 ```json
 {
-  "title": "Nombre del producto",
-  "description": "Descripción del producto",
-  "price": 99.99,
-  "stock": 10
+  "email": "user@email.com",
+  "password": "strongPass123."
 }
 ```
 
+**Respuesta exitosa (200):**
+```json
+{
+  "message": "Bienvenido/a!",
+  "token": "<jwt>"
+}
+```
+
+---
+
+### Productos
+
+| Método | Ruta | Descripción | Auth |
+|---|---|---|---|
+| GET | `/api/products` | Obtiene todos los productos | No |
+| GET | `/api/products/:id` | Obtiene un producto por ID | No |
+| POST | `/api/products` | Crea un nuevo producto | Sí |
+| PUT | `/api/products/:id` | Modifica un producto existente | Sí |
+| DELETE | `/api/products/:id` | Elimina un producto | Sí |
