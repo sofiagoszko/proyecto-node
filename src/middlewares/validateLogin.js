@@ -3,15 +3,12 @@ import { body, validationResult } from 'express-validator';
 export const validateLogin = [
     body('email')
         .trim()
-        .isEmail()
-        .withMessage('Ingrese un email válido')
-        .notEmpty()
-        .withMessage('El email no puede estar vacío'),
+        .isEmail().withMessage('Ingrese un email válido')
+        .notEmpty().withMessage('El email no puede estar vacío'),
 
     body('password')
         .trim()
-        .notEmpty()
-        .withMessage('La contraseña no puede estar vacía'),
+        .notEmpty().withMessage('La contraseña no puede estar vacía'),
 
     (req, res, next) => {
         const errors = validationResult(req);

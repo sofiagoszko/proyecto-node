@@ -2,11 +2,9 @@ import { param, validationResult } from 'express-validator';
 
 export const validateId = [
     param('id')
-        .isString()
-        .withMessage('El ID debe ser un string')
+        .isString().withMessage('El ID debe ser un string')
         .trim()
-        .notEmpty()
-        .withMessage('El ID no puede estar vacío'),
+        .notEmpty().withMessage('El ID no puede estar vacío'),
 
     (req, res, next) => {
         const errors = validationResult(req);
