@@ -4,10 +4,8 @@ dotenv.config();
 
 const JWT = process.env.JWT_SECRET;
 
-export const generateToken = (userData) => {
-    const payload = {
-        id: userData.id,
-    }
+export const generateToken = (id) => {
+    const payload = { id }
 
     return jwt.sign(payload, JWT, {expiresIn: '3h'});
 }

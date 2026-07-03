@@ -1,18 +1,20 @@
-import { createUserModel, findUserByEmailModel, default_user } from '../models/Users.js';
+import { createUserModel, findUserByEmailModel } from '../models/Users.js';
 import { generateToken } from '../utils/token.generator.js';
 import bcrypt from 'bcrypt';
 
-export const login = (req, res, next) => {
+export const login = async (req, res, next) => {
     try{
         const { email, password } = req.body;
+        const user = await findUserByEmailModel(email);
+        const valid = user && await bcrypt.compare(password, user.password);
 
-        if(email !== default_user.email || password !== default_user.password){
+        if(!valid){
             const err = new Error();
             err.status = 401;
             return next(err);
         }
 
-        const token = generateToken(default_user);
+        const token = generateToken(user.id);
 
         res.status(200).json({
             message: 'Bienvenido/a!',

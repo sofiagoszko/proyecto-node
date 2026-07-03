@@ -1,13 +1,5 @@
-export const default_user = {
-    id: 1,
-    name: 'User',
-    email: 'user@email.com',
-    password: 'strongPass123.',
-    admin: true,
-};
-
 import db from '../config/firebase.js';
-import { collection, addDoc, getDoc, getDocs, query, where} from 'firebase/firestore';
+import { collection, addDoc, getDocs, query, where} from 'firebase/firestore';
 
 const usersCollection = collection(db, 'users');
 
@@ -21,6 +13,7 @@ export const findUserByEmailModel = async (email) => {
             return {
                 id: doc.id,
                 email: doc.data().email,
+                password: doc.data().password,
             };
         }else{
             return null;
@@ -33,7 +26,7 @@ export const findUserByEmailModel = async (email) => {
 
 export const createUserModel = async (name, email, passHash) => {
     try {
-        const userRef = await addDoc(usersCollection, { name, email, passHash });
+        const userRef = await addDoc(usersCollection, { name, email, password: passHash });
 
         return {
             id: userRef.id,

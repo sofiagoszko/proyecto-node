@@ -1,12 +1,12 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+dotenv.config();
 import { error404 } from './src/middlewares/error404.middleware.js';
 import { error } from './src/middlewares/error.middleware.js';
 import productsRouter from './src/routes/products.routes.js';
 import authRouter from './src/routes/auth.routes.js';
 
-dotenv.config();
 const app = express();
 app.use(express.json());
 app.use(cors());
