@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 dotenv.config();
+import helmet from 'helmet';
 import { error404 } from './src/middlewares/error404.middleware.js';
 import { error } from './src/middlewares/error.middleware.js';
 import productsRouter from './src/routes/products.routes.js';
@@ -9,6 +10,7 @@ import authRouter from './src/routes/auth.routes.js';
 
 const app = express();
 app.use(express.json());
+app.use(helmet());
 app.use(cors());
 
 const PORT = process.env.PORT || 3000;
