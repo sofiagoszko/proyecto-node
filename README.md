@@ -10,7 +10,7 @@ API REST con Express y Firebase Firestore para gestión de productos con autenti
 ## Estructura del proyecto
 
 ```
-NODE_ENTREGA/
+proyecto-node/
 ├── index.js
 ├── .env.example
 ├── package.json
@@ -26,13 +26,16 @@ NODE_ENTREGA/
     │   ├── error404.middleware.js
     │   ├── validateId.js
     │   ├── validateLogin.js
-    │   └── validateProduct.js
+    │   ├── validateProduct.js
+    │   └── validateRegister.js
     ├── models/
     │   ├── Product.js
     │   └── Users.js
     ├── routes/
     │   ├── auth.routes.js
     │   └── products.routes.js
+    ├── seeders/
+    │   └── productos.seeder.js
     └── utils/
         └── token.generator.js
 ```
@@ -46,9 +49,11 @@ NODE_ENTREGA/
 | express | ^5.2.1 |
 | firebase | ^12.15.0 |
 | jsonwebtoken | ^9.0.3 |
+| bcrypt | ^6.0.0 |
 | express-validator | ^7.3.2 |
 | dotenv | ^17.4.2 |
 | cors | ^2.8.6 |
+| helmet | ^8.2.0 |
 
 ---
 
@@ -90,6 +95,9 @@ npm start
 
 # Desarrollo (con hot reload)
 npm run dev
+
+# Cargar productos de ejemplo en Firestore (solo una vez)
+npm run seed
 ```
 
 La API queda disponible en `http://localhost:3000`.
@@ -98,20 +106,13 @@ La API queda disponible en `http://localhost:3000`.
 
 ## Autenticación
 
-Los endpoints de escritura (POST, PUT, DELETE) requieren un token JWT en el header:
+Los usuarios se registran y loguean contra la colección `users` de Firestore (passwords hasheados con bcrypt). Los endpoints de escritura de productos (POST, PUT, DELETE) requieren un token JWT en el header:
 
 ```
 Authorization: Bearer <token>
 ```
 
-El token se obtiene haciendo login con las credenciales del usuario de demostración.
-
-### Credenciales por defecto
-
-```
-Email:    user@email.com
-Password: strongPass123.
-```
+El token se obtiene haciendo login luego de registrarse.
 
 ---
 
@@ -121,13 +122,33 @@ Password: strongPass123.
 
 | Método | Ruta | Descripción | Auth |
 |---|---|---|---|
+| POST | `/api/auth/register` | Registra un nuevo usuario | No |
 | POST | `/api/auth/login` | Inicia sesión y devuelve un token JWT | No |
 
-**Body:**
+**POST `/api/auth/register`:**
+```json
+{
+  "name": "Sofia",
+  "email": "user@email.com",
+  "password": "StrongPass123."
+}
+```
+La contraseña debe tener mínimo 8 caracteres, con al menos una mayúscula, una minúscula, un número y un símbolo.
+
+**Respuesta exitosa (201):**
+```json
+{
+  "message": "Bienvenido/a!",
+  "id": "<id del usuario>",
+  "email": "user@email.com"
+}
+```
+
+**POST `/api/auth/login` — Body:**
 ```json
 {
   "email": "user@email.com",
-  "password": "strongPass123."
+  "password": "StrongPass123."
 }
 ```
 
@@ -150,3 +171,11 @@ Password: strongPass123.
 | POST | `/api/products` | Crea un nuevo producto | Sí |
 | PUT | `/api/products/:id` | Modifica un producto existente | Sí |
 | DELETE | `/api/products/:id` | Elimina un producto | Sí |
+
+
+---
+
+### Link de deploy
+
+[https://proyecto-node-26134-slg.onrender.com/](https://proyecto-node-26134-slg.onrender.com/)
+
